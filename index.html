@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div id="preloader">
+    <div class="spinner"></div>
+</div>
 <div class="container">
     <div class="corner top-left">MITRO<br>STUDIO</div>
     <div class="corner top-right">
@@ -29,42 +32,67 @@
 </div>
 
 <script>
-    const imageCount = 9; // Number of images
+    const imageCount = 9; // Total number of images
+    let loadedImages = 0;
     const imageElement = document.getElementById('slideshow');
-    const bodyElement = document.body; // Reference to the body element
+    const bodyElement = document.body;
+
+    // Preload all images
+    const preloadImages = (count, callback) => {
+        const images = [];
+        for (let i = 1; i <= count; i++) {
+            const img = new Image();
+            img.src = `${i}.png`;
+            img.onload = () => {
+                loadedImages++;
+                if (loadedImages === count) {
+                    callback(); // Call the callback when all images are loaded
+                }
+            };
+            img.onerror = () => {
+                console.error(`Failed to load image: ${img.src}`);
+            };
+            images.push(img); // Ensure the image is kept in memory
+        }
+    };
+
+    // Hide loader and show the page
+    const showPage = () => {
+        document.getElementById('preloader').style.display = 'none';
+        bodyElement.classList.add('loaded');
+    };
+
+    // Initialize the preloading
+    preloadImages(imageCount, showPage);
+
+    // Handle image changes
     let currentIndex = 1;
-    let isScrolling = false; // Prevent rapid scroll
 
     window.addEventListener('wheel', (event) => {
-        if (isScrolling) return; // Ignore if currently scrolling
-        isScrolling = true;
+        if (!bodyElement.classList.contains('loaded')) return; // Wait for loading to complete
 
-        setTimeout(() => {
-            if (event.deltaY > 0) {
-                // Scrolling down
-                if (currentIndex < imageCount) {
-                    currentIndex++;
-                }
-            } else {
-                // Scrolling up
-                if (currentIndex > 1) {
-                    currentIndex--;
-                }
-            }
+        if (event.deltaY > 0 && currentIndex < imageCount) {
+            currentIndex++;
+        } else if (event.deltaY < 0 && currentIndex > 1) {
+            currentIndex--;
+        }
 
-            // Change the image
-            imageElement.src = `${currentIndex}.png`;
+        // Change the image
+        imageElement.src = `${currentIndex}.png`;
 
-            // Toggle dark mode for 5.png
-            if (currentIndex === 5) {
-                bodyElement.classList.add('dark-mode');
-            } else {
-                bodyElement.classList.remove('dark-mode');
-            }
-
-            isScrolling = false;
-        }, 20); // Faster scroll (100ms delay)
+        // Toggle dark mode for specific image
+        bodyElement.classList.toggle('dark-mode', currentIndex === 5);
     });
+
+    // Handle image transitions
+    imageElement.addEventListener('load', () => {
+        imageElement.style.opacity = 1; // Fade in when loaded
+    });
+
+    imageElement.addEventListener('error', () => {
+        console.error(`Failed to load image: ${imageElement.src}`);
+    });
+
 </script>
 </body>
 </html>
