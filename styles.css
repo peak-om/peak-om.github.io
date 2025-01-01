@@ -1,0 +1,121 @@
+@font-face {
+    font-family: 'Varela';
+    src: url('Varela-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'BebasNeue';
+    src: url('BebasNeue-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'DMSANS';
+    src: url('DMSans_36pt-ExtraBold.ttf') format('truetype');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 700px;
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Varela', Arial, sans-serif;
+    overflow: hidden;
+    background-color: white; /* Default background */
+    color: black; /* Default text color */
+}
+
+.container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.corner {
+    position: absolute;
+    font-size: 18px;
+    color: #333;
+}
+
+.top-left {
+    top: 20px;
+    left: 20px;
+}
+
+.top-right {
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px; /* Space between "Our team" and "Get in Touch" */
+}
+
+.team {
+    color: #333;
+}
+
+.touch {
+    color: #555;
+}
+
+.bottom-left {
+    font-family: 'DMSANS', sans-serif;
+    bottom: 20px;
+    left: 20px;
+    font-size: 2vw;
+}
+
+.bottom-right {
+    bottom: 20px;
+    right: 20px;
+}
+
+.flex-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    gap: 20px; /* Space between text and image */
+}
+
+.center-text {
+    font-size: 18vw;
+    color: #111;
+    font-family: 'BebasNeue', sans-serif;
+    white-space: nowrap;
+    text-transform: uppercase;
+    line-height: 0.8; /* Remove extra space between lines */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove any default padding */
+}
+
+.center-image {
+    width: 15vw;  /* Match the width of the original SVG */
+    height: auto; /* Maintain aspect ratio */
+    display: block;
+    margin: 0 auto;
+}
+
+.dark-mode {
+    background-color: black;
+    color: white;
+}
+
+.dark-mode .corner,
+.dark-mode .corner span,
+.dark-mode .center-text {
+    color: white; /* Text becomes white */
+}
