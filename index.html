@@ -46,13 +46,13 @@
             img.onload = () => {
                 loadedImages++;
                 if (loadedImages === count) {
-                    callback(); // Call the callback when all images are loaded
+                    callback();
                 }
             };
             img.onerror = () => {
                 console.error(`Failed to load image: ${img.src}`);
             };
-            images.push(img); // Ensure the image is kept in memory
+            images.push(img);
         }
     };
 
@@ -65,11 +65,11 @@
     // Initialize the preloading
     preloadImages(imageCount, showPage);
 
-    // Handle image changes
     let currentIndex = 1;
 
+    // Handle scroll for desktop (wheel)
     window.addEventListener('wheel', (event) => {
-        if (!bodyElement.classList.contains('loaded')) return; // Wait for loading to complete
+        if (!bodyElement.classList.contains('loaded')) return;
 
         if (event.deltaY > 0 && currentIndex < imageCount) {
             currentIndex++;
@@ -77,14 +77,38 @@
             currentIndex--;
         }
 
-        // Change the image
-        imageElement.src = `${currentIndex}.png`;
-
-        // Toggle dark mode for specific image
-        bodyElement.classList.toggle('dark-mode', currentIndex === 5);
+        updateImage();
     });
 
-    // Handle image transitions
+    // Handle touch scroll for mobile
+    let startY = 0;
+
+    window.addEventListener('touchstart', (event) => {
+        startY = event.touches[0].clientY;
+    });
+
+    window.addEventListener('touchmove', (event) => {
+        if (!bodyElement.classList.contains('loaded')) return;
+
+        const endY = event.touches[0].clientY;
+        const deltaY = startY - endY;
+
+        if (deltaY > 20 && currentIndex < imageCount) {
+            currentIndex++;
+            startY = endY; // Reset startY to prevent rapid scrolling
+        } else if (deltaY < -20 && currentIndex > 1) {
+            currentIndex--;
+            startY = endY; // Reset startY to prevent rapid scrolling
+        }
+
+        updateImage();
+    });
+
+    const updateImage = () => {
+        imageElement.src = `${currentIndex}.png`;
+        bodyElement.classList.toggle('dark-mode', currentIndex === 5);
+    };
+
     imageElement.addEventListener('load', () => {
         imageElement.style.opacity = 1; // Fade in when loaded
     });
