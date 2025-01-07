@@ -122,6 +122,7 @@ body {
 .dark-mode .center-text {
     color: white;
 }
+
 #preloader {
     position: fixed;
     top: 0;
