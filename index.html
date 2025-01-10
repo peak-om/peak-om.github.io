@@ -65,9 +65,10 @@
     preloadImages(imageCount, showPage);
 
     let currentIndex = 1;
+    let isScrollLocked = false;
 
     window.addEventListener('wheel', (event) => {
-        if (!bodyElement.classList.contains('loaded')) return;
+        if (!bodyElement.classList.contains('loaded') || isScrollLocked) return;
 
         if (event.deltaY > 0 && currentIndex < imageCount) {
             currentIndex++;
@@ -85,7 +86,7 @@
     });
 
     window.addEventListener('touchmove', (event) => {
-        if (!bodyElement.classList.contains('loaded')) return;
+        if (!bodyElement.classList.contains('loaded') || isScrollLocked) return;
 
         const endY = event.touches[0].clientY;
         const deltaY = startY - endY;
@@ -142,6 +143,14 @@
             bottomLeftCorner.style.transform = 'translateY(0)';
             bottomRightCorner.style.opacity = 1;
             bottomRightCorner.style.transform = 'translateY(0)';
+        }
+
+        // Lock scroll at frame 10
+        if (currentIndex === 10 && !isScrollLocked) {
+            isScrollLocked = true;
+            setTimeout(() => {
+                isScrollLocked = false;
+            }, 500); // Lock scroll for half a second
         }
     };
 
