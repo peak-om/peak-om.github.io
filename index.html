@@ -145,8 +145,8 @@
             bottomRightCorner.style.transform = 'translateY(0)';
         }
 
-        // Lock scroll at frame 10
-        if (currentIndex === 10 && !isScrollLocked) {
+        // Lock scroll at frames 5 and 10
+        if ((currentIndex === 5 || currentIndex === 10) && !isScrollLocked) {
             isScrollLocked = true;
             setTimeout(() => {
                 isScrollLocked = false;
