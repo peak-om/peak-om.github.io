@@ -32,10 +32,12 @@
 </div>
 
 <script>
-    const imageCount = 9;
+    const imageCount = 30;
     let loadedImages = 0;
     const imageElement = document.getElementById('slideshow');
     const bodyElement = document.body;
+    const bottomLeftCorner = document.querySelector('.corner.bottom-left');
+    const bottomRightCorner = document.querySelector('.corner.bottom-right');
 
     const preloadImages = (count, callback) => {
         const images = [];
@@ -102,6 +104,45 @@
     const updateImage = () => {
         imageElement.src = `${currentIndex}.svg`;
         bodyElement.classList.toggle('dark-mode', currentIndex === 5);
+
+        const centerText = document.querySelector('.center-text');
+        const centerImage = document.querySelector('.center-image');
+
+        if (centerText && centerImage) {
+            if (currentIndex > 9) {
+                centerText.style.opacity = 0;
+                centerImage.style.transform = 'translateY(-100%)';
+            } else {
+                centerText.style.opacity = 1;
+                centerImage.style.transform = 'translateY(0)';
+            }
+        }
+
+        // Combine scaling and translation for imageElement
+        let scaleFactor = 1; // Default scale
+        let translateY = 0;  // Default translation
+
+        if (currentIndex > 9) {
+            translateY = -100; // Translate upwards
+        }
+        if (currentIndex > 15) {
+            scaleFactor = 1 + (currentIndex - 15) * 0.6; // Scale up
+        }
+
+        imageElement.style.transform = `translateY(${translateY}%) scale(${scaleFactor})`;
+
+        // Hide or show bottom-left and bottom-right corners
+        if (currentIndex > 12) {
+            bottomLeftCorner.style.opacity = 0;
+            bottomLeftCorner.style.transform = 'translateY(100%)';
+            bottomRightCorner.style.opacity = 0;
+            bottomRightCorner.style.transform = 'translateY(100%)';
+        } else {
+            bottomLeftCorner.style.opacity = 1;
+            bottomLeftCorner.style.transform = 'translateY(0)';
+            bottomRightCorner.style.opacity = 1;
+            bottomRightCorner.style.transform = 'translateY(0)';
+        }
     };
 
     imageElement.addEventListener('load', () => {
@@ -111,6 +152,7 @@
     imageElement.addEventListener('error', () => {
         console.error(`Failed to load image: ${imageElement.src}`);
     });
+
 </script>
 </body>
 </html>
